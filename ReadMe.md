@@ -1,3 +1,14 @@
+# 常用指令
+```cmd
+sudo nautilus
+```
+```cmd
+sudo chown -R www-data:www-data classic_modify_20240110601
+```
+```cmd
+sudo chmod -R 755 *
+```
+
 # 安裝方式
 - How to Install ZoneMinder on Ubuntu 22.04 | 20.04 LTS
   - <https://linux.how2shout.com/how-to-install-zoneminder-on-ubuntu-22-04-20-04-lts/>
@@ -18,17 +29,6 @@
 # SSL
 - [教學][Ubuntu 架站] 為 Ubuntu 22.04 上的 Apache 配置 Let’s Encrypt SSL 憑證
   - <https://ui-code.com/archives/645>
- 
-# 常用指令
-```cmd
-sudo nautilus
-```
-```cmd
-sudo chown -R www-data:www-data classic_modify_20240110601
-```
-```cmd
-sudo chmod -R 755 *
-```
 
 # phpMyAdmin
 - 安裝
