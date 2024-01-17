@@ -30,13 +30,13 @@ sudo chown -R www-data:www-data classic_modify_20240110601
 sudo chmod -R 755 *
 ```
 
-# phpmyadmin
+# phpMyAdmin
 - 安裝
   - [教學][Ubuntu 架站] 在 Ubuntu 22.04 上安裝 phpMyAdmin（Nginx）
     - <https://ui-code.com/archives/689>
 - 使用者新增、授權、撤銷授權
   - <https://zack7498.gitbooks.io/mysql/content/chapter1/2shi-yong-zhe-xin-zeng-3001-shou-quan-3001-che-xiao-shou-quan.html>
-  - phpmyadmin不允許使用root登入，故要用上述方法新增使用者於phpmyadmin使用。
+  - phpMyAdmin不允許使用root登入，故要用上述方法新增使用者於phpMyAdmin使用。
 
 # 其他
 - VirtualBox 如何開機後自動啟動虛擬機【Windows排程設定教學】
