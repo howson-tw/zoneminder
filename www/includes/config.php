@@ -1,0 +1,266 @@
+<?php
+//
+// ZoneMinder web configuration file, $Date$, $Revision$
+// Copyright (C) 2001-2008 Philip Coombes
+//
+// This program is free software; you can redistribute it and/or
+// modify it under the terms of the GNU General Public License
+// as published by the Free Software Foundation; either version 2
+// of the License, or (at your option) any later version.
+//
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with this program; if not, write to the Free Software
+// Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+//
+
+//
+// This section contains options substituted by the zmconfig.pl utility, do not edit these directly
+//
+define( 'ZM_CONFIG', '/etc/zm/zm.conf' );               // Path to config file
+define( 'ZM_CONFIG_SUBDIR', '/etc/zm/conf.d' ); // Path to config subfolder
+// Define, and override any given in config file
+define( 'ZM_VERSION', '1.36.33' );               // Version
+define( 'ZM_DIR_TEMP', '/var/tmp/zm' );
+define( 'ZM_DIR_CACHE', '/var/cache/zoneminder/cache' );
+global $configvals;
+
+$configFile = ZM_CONFIG;
+$localConfigFile = basename($configFile);
+if ( file_exists($localConfigFile) && filesize($localConfigFile) > 0 ) {
+  if ( php_sapi_name() == 'cli' && empty($_SERVER['REMOTE_ADDR']) )
+    print("Warning, overriding installed $localConfigFile file with local copy\n");
+  else
+    error_log("Warning, overriding installed $localConfigFile file with local copy");
+  $configFile = $localConfigFile;
+}
+
+# Process name, value pairs from the main config file first
+$configvals = process_configfile($configFile);
+
+# Search for user created config files. If one or more are found then
+# update our config value array with those values
+$configSubFolder = ZM_CONFIG_SUBDIR;
+if ( is_dir($configSubFolder) ) {
+  if ( is_readable($configSubFolder) ) {
+    foreach ( glob($configSubFolder.'/*.conf') as $filename ) {
+      //error_log("processing $filename");
+      $configvals = array_replace($configvals, process_configfile($filename));
+    }
+  } else {
+    error_log('WARNING: ZoneMinder configuration subfolder found but is not readable. Check folder permissions on '.$configSubFolder);
+  }
+} else {
+  error_log('WARNING: ZoneMinder configuration subfolder found but is not a directory. Check '.$configSubFolder);
+}
+
+# Now that our array our finalized, define each key => value
+# pair in the array as a constant
+foreach ( $configvals as $key => $value ) {
+  define($key, $value);
+}
+
+//
+// This section is options normally derived from other options or configuration
+//
+define('ZMU_PATH', ZM_PATH_BIN.'/zmu');               // Local path to the ZoneMinder Utility
+
+//
+// If setup supports Video 4 Linux v2 and/or v1
+//
+define('ZM_HAS_V4L2', '1');               // V4L2 support enabled
+define('ZM_HAS_V4L1', '1');               // V4L1 support enabled
+define('ZM_HAS_V4L', '1');                 // V4L support enabled
+
+//
+// If ONVIF support has been built in
+//
+define('ZM_HAS_ONVIF', '1');             // ONVIF support enabled
+
+//
+// If PCRE dev libraries are installed
+//
+define('ZM_PCRE', '1');                       // PCRE support enabled
+
+//
+// Alarm states
+//
+define('STATE_UNKNOWN', 0);
+define('STATE_IDLE', 1);
+define('STATE_PREALARM', 2);
+define('STATE_ALARM', 3);
+define('STATE_ALERT', 4);
+define('STATE_TAPE', 5);
+
+//
+// DVR Control Commands
+//
+
+define('MSG_CMD', 1);
+define('MSG_DATA_WATCH', 2);
+define('MSG_DATA_EVENT', 3);
+
+define('CMD_NONE', 0);
+define('CMD_PAUSE', 1);
+define('CMD_PLAY', 2);
+define('CMD_STOP', 3);
+define('CMD_FASTFWD', 4);
+define('CMD_SLOWFWD', 5);
+define('CMD_SLOWREV', 6);
+define('CMD_FASTREV', 7);
+define('CMD_ZOOMIN', 8);
+define('CMD_ZOOMOUT', 9);
+define('CMD_PAN', 10);
+define('CMD_SCALE', 11);
+define('CMD_PREV', 12);
+define('CMD_NEXT', 13);
+define('CMD_SEEK', 14 );
+define('CMD_VARPLAY', 15);
+define('CMD_QUIT', 17);
+define('CMD_QUERY', 99);
+
+//
+// These are miscellaneous options you won't normally need to change
+//
+define('MAX_EVENTS', 10);            // The maximum number of events to show in the monitor event listing
+define('RATE_BASE', 100);            // The additional scaling factor used to help get fractional rates in integer format
+define('SCALE_BASE', 100);           // The additional scaling factor used to help get fractional scales in integer format
+
+//
+// Date and time formats, not to be modified by language files
+//
+define('STRF_FMT_DATETIME_DB', 'Y-m-d H:i:s');      // Strftime format for database queries, don't change
+define('MYSQL_FMT_DATETIME_SHORT', 'Y/m/d H:i:s');  // MySQL date_format shorter format for dates with time
+
+global $dateFormatter;
+global $dateTimeFormatter;
+global $timeFormatter;
+$dateFormatter = new IntlDateFormatter(null, IntlDateFormatter::SHORT, IntlDateFormatter::NONE);
+$dateTimeFormatter = new IntlDateFormatter(null, IntlDateFormatter::SHORT, IntlDateFormatter::LONG);
+$timeFormatter = new IntlDateFormatter(null, IntlDateFormatter::NONE, IntlDateFormatter::LONG);
+
+require_once('database.php');
+require_once('logger.php');
+loadConfig();
+if (ZM_LOCALE_DEFAULT) {
+  try {
+    if (ZM_TIMEZONE) {
+      $dateFormatter = new IntlDateFormatter(ZM_LOCALE_DEFAULT, IntlDateFormatter::SHORT, IntlDateFormatter::NONE, ZM_TIMEZONE);
+      $dateTimeFormatter = new IntlDateFormatter(ZM_LOCALE_DEFAULT, IntlDateFormatter::SHORT, IntlDateFormatter::LONG, ZM_TIMEZONE);
+      $timeFormatter = new IntlDateFormatter(ZM_LOCALE_DEFAULT, IntlDateFormatter::NONE, IntlDateFormatter::LONG, ZM_TIMEZONE);
+    } else {
+      $dateFormatter = new IntlDateFormatter(ZM_LOCALE_DEFAULT, IntlDateFormatter::SHORT, IntlDateFormatter::NONE);
+      $dateTimeFormatter = new IntlDateFormatter(ZM_LOCALE_DEFAULT, IntlDateFormatter::SHORT, IntlDateFormatter::LONG);
+      $timeFormatter = new IntlDateFormatter(ZM_LOCALE_DEFAULT, IntlDateFormatter::NONE, IntlDateFormatter::LONG);
+    }
+  } catch(Exception $e) {
+    ZM\Error($e->getMessage());
+    $dateFormatter = new IntlDateFormatter(null, IntlDateFormatter::SHORT, IntlDateFormatter::NONE);
+    $dateTimeFormatter = new IntlDateFormatter(null, IntlDateFormatter::SHORT, IntlDateFormatter::LONG);
+    $timeFormatter = new IntlDateFormatter(null, IntlDateFormatter::NONE, IntlDateFormatter::LONG);
+  }
+}
+if (ZM_DATE_FORMAT_PATTERN) {
+  $dateFormatter->setPattern(ZM_DATE_FORMAT_PATTERN);
+}
+if (ZM_DATETIME_FORMAT_PATTERN) {
+  $dateTimeFormatter->setPattern(ZM_DATETIME_FORMAT_PATTERN);
+}
+if (ZM_TIME_FORMAT_PATTERN) {
+  $timeFormatter->setPattern(ZM_TIME_FORMAT_PATTERN);
+}
+ZM\Logger::fetch()->initialise();
+
+$GLOBALS['defaultUser'] = array(
+  'Username'  => 'admin',
+  'Password'  => '',
+  'Language'  => '',
+  'Enabled'   => 1,
+  'Stream'    => 'View',
+  'Events'    => 'Edit',
+  'Control'   => 'Edit',
+  'Monitors'  => 'Edit',
+  'Groups'    => 'Edit',
+  'Devices'   => 'Edit',
+  'Snapshots' => 'Edit',
+  'System'    => 'Edit',
+  'MaxBandwidth' => '',
+  'MonitorIds'   => false
+);
+
+function loadConfig( $defineConsts=true ) {
+  global $config;
+  global $dbConn;
+
+  $config = array();
+
+  $result = $dbConn->query('SELECT Name,Value,Private FROM Config');
+  if ( !$result )
+    echo mysql_error();
+  while( $row = dbFetchNext($result) ) {
+    $config[$row['Name']] = $row;
+
+    if ( $defineConsts ) {
+      # Values in conf.d files override db so check if already defined and update value
+      if ( ! defined($row['Name']) ) {
+        define($row['Name'], $row['Value']);
+      } else {
+        $config[$row['Name']]['Value'] = constant($row['Name']);
+      }
+    }
+  }
+  return $config;
+} # end function loadConfig
+
+// For Human-readability, use ZM_SERVER_HOST or ZM_SERVER_NAME in zm.conf, and convert it here to a ZM_SERVER_ID
+if ( ! defined('ZM_SERVER_ID') ) {
+	require_once('Server.php');
+  if ( defined('ZM_SERVER_NAME') and ZM_SERVER_NAME ) {
+		# Use Server lookup so that it caches
+		$Server = ZM\Server::find_one(array('Name'=>ZM_SERVER_NAME));
+    if ( !$Server ) {
+      ZM\Error('Invalid Multi-Server configration detected. ZM_SERVER_NAME set to ' . ZM_SERVER_NAME . ' in zm.conf, but no corresponding entry found in Servers table.');
+    } else {
+      define('ZM_SERVER_ID', $Server->Id());
+    }
+  } else if ( defined('ZM_SERVER_HOST') and ZM_SERVER_HOST ) {
+		$Server = ZM\Server::find_one(array('Name'=>ZM_SERVER_HOST));
+    if ( ! $Server ) {
+      ZM\Error('Invalid Multi-Server configration detected. ZM_SERVER_HOST set to ' . ZM_SERVER_HOST . ' in zm.conf, but no corresponding entry found in Servers table.');
+    } else {
+      define('ZM_SERVER_ID', $Server->Id());
+    }
+  }
+}
+
+if ( defined('ZM_TIMEZONE') and ZM_TIMEZONE )
+  ini_set('date.timezone', ZM_TIMEZONE);
+
+function process_configfile($configFile) {
+  if ( is_readable($configFile) ) {
+    $configvals = array();
+
+    $cfg = fopen($configFile, 'r') or ZM\Error('Could not open config file: '.$configFile);
+    while ( !feof($cfg) ) {
+      $str = fgets($cfg, 256);
+      if ( preg_match('/^\s*(#.*)?$/', $str) ) {
+        continue;
+      } else if ( preg_match('/^\s*([^=\s]+)\s*=\s*[\'"]*(.*?)[\'"]*\s*$/', $str, $matches) ) {
+        $configvals[$matches[1]] = $matches[2];
+			} else {
+				ZM\Error("Malformed line in config $configFile\n$str");
+			}
+    }
+    fclose($cfg);
+    return $configvals;
+  } else {
+    error_log('WARNING: ZoneMinder configuration file found but is not readable. Check file permissions on '.$configFile);
+    return false;
+  }
+}
+
+?>
