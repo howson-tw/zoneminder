@@ -30,7 +30,7 @@ function selectLayout(element) {
       if (layout.Positions['default'] ) {
         styles = layout.Positions['default'];
         for (style in styles) {
-          console.log(monitor.id + ": Applying " + style + ' ' + styles[style]);
+          console.log("Applying " + style + ' ' + styles[style]);
           monitor_frame.css(style, styles[style]);
         }
       } else {
