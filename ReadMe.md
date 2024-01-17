@@ -1,6 +1,9 @@
 # 安裝方式
 - How to Install ZoneMinder on Ubuntu 22.04 | 20.04 LTS
   - <https://linux.how2shout.com/how-to-install-zoneminder-on-ubuntu-22-04-20-04-lts/>
+  - ```
+    date.timezone = Asia/Taipei
+    ```
 
 # 其他zonemider問題
 - Montage will only display 6 of 8 cameras
