@@ -26,3 +26,7 @@ sudo chown -R www-data:www-data classic_modify_20240110601
 ```cmd
 sudo chmod -R 755 *
 ```
+
+# 其他
+- VirtualBox 如何開機後自動啟動虛擬機【Windows排程設定教學】
+  - https://eheima.com/7512/virtualbox-autostart
