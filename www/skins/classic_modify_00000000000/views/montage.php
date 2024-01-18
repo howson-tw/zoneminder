@@ -232,11 +232,49 @@ if ( canView('System') ) {
 <?php } ?>
         </form>
       </div>
+      <!-- classic_modify_00000000000 start -->
+      <div id="gridControl">
+        <form action="index.php?view=montage" method="get">
+          <input type="hidden" name="view" value="montage"/>
+        <?php 
+          $arrDefaultGridMonitorId = array();
+          $i = 0;
+          foreach($monitors as $monitor) {
+            array_push($arrDefaultGridMonitorId, $monitor->Id());
+            if($i==4) {
+              break;
+            }
+          }
+          if(isset($_GET["gridMonitorId"])):
+            for($i=0; $i<4; $i++): 
+        ?>
+          <label>Grid <?php echo ($i+1); ?></label>
+          <input type="number" name="gridMonitorId[]" value="<?php echo isset($_GET["gridMonitorId"][$i]) ? $_GET["gridMonitorId"][$i] : "" ; ?>" size="3">
+        <?php 
+            endfor;
+          else:
+            foreach($arrDefaultGridMonitorId as $key => $dgId):
+        ?>
+          <label>Grid <?php echo ($i+1); ?></label>
+          <input type="number" name="gridMonitorId[]" value="<?php echo $dgId ; ?>" size="3">
+        <?php
+            endforeach;
+          endif;
+        ?>
+          <label>Grid Ratio</label>
+          <input type="number" name="gridRatio" value="<?php echo isset($_GET["gridRatio"]) ? $_GET["gridRatio"] : "75" ; ?>" size="4">
+          <input type="submit" value="Apply">
+        </form>
+        <form action="index.php?view=montage" method="get">
+          <input type="hidden" name="view" value="montage"/>
+          <input type="submit" value="Cancel">
+        </form>
+      </div>
+      <!-- classic_modify_00000000000 end -->
     </div>
   </div>
   <div id="content">
     <div id="monitors">
-
 <?php
   // classic_modify_00000000000 start
   if(!isset($_GET["gridRatio"])) {
