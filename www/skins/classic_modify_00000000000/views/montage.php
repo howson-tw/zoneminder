@@ -193,9 +193,9 @@ if ( canView('System') ) {
         <input type="hidden" name="view" value="montage"/>
         <?php echo $filterbar ?>
       </form>
-      <!-- classic_modify_20240118001 start -->
+      <!-- classic_modify_00000000000 start -->
       <div id="sizeControl" <?php echo isset($_GET["gridMonitorId"]) ? "style=\"display:none\"" : ""; ?>>
-      <!-- classic_modify_20240118001 end -->
+      <!-- classic_modify_00000000000 end -->
         <form action="?view=montage" method="post">
           <input type="hidden" name="object" value="MontageLayout"/>
           <input type="hidden" name="action" value="Save"/>
@@ -238,7 +238,7 @@ if ( canView('System') ) {
     <div id="monitors">
 
 <?php
-  // classic_modify_20240118001 start
+  // classic_modify_00000000000 start
   if(!isset($_GET["gridRatio"])) {
     $_GET["gridRatio"] = 66;
   }
@@ -260,9 +260,9 @@ if ( canView('System') ) {
     }
     //print_r($_GET["gridMonitorId"]);
   }
-  // classic_modify_20240118001 end
+  // classic_modify_00000000000 end
 ?>
-<?php if(isset($_GET["gridMonitorId"])): // classic_modify_20240118001 start?>
+<?php if(isset($_GET["gridMonitorId"])): // classic_modify_00000000000 start?>
   <table width="100%">
     <tr>
       <td width="<?php echo $_GET["gridRatio"]; ?>%"><?php isset($_GET["gridMonitorId"][0]) ? showMonitor($monitors[$arrMonitorIdPosition[$_GET["gridMonitorId"][0]]], $_GET["gridMonitorId"]) : ""; ?></td>
@@ -278,15 +278,15 @@ if ( canView('System') ) {
       showMonitor($monitors[$arrMonitorIdPosition[$_GET["gridMonitorId"][$i]]], $_GET["gridMonitorId"], "float: left; inset: 0px; width: 25%;");
     endfor; 
   ?>
-<?php endif; // classic_modify_20240118001 end?>
+<?php endif; // classic_modify_00000000000 end?>
 
 <?php
 foreach ( $monitors as $monitor ) {
-  // classic_modify_20240118001 start
+  // classic_modify_00000000000 start
   if( isset($_GET["gridMonitorId"]) ) {
     break;
   }
-  // classic_modify_20240118001 end
+  // classic_modify_00000000000 end
 ?>
           <div id="monitor<?php echo $monitor->Id() ?>" class="monitor idle"
           title="<?php echo $monitor->Id() . ' ' .$monitor->Name() ?>"
@@ -386,7 +386,7 @@ foreach ( array_reverse($zones) as $zone ) {
 <?php xhtmlFooter() ?>
 
 <?php
-// classic_modify_20240118001 start
+// classic_modify_00000000000 start
 function showMonitor($monitor, $arrGridMonitorId, $strStyle="width: 100%;") {
 ?>
     <div 
@@ -506,5 +506,5 @@ if ( (!ZM_WEB_COMPACT_MONTAGE) && ($monitor->Type() != 'WebSite') ) {
     </div>
 <?php
   }
-// classic_modify_20240118001 end
+// classic_modify_00000000000 end
 ?>

@@ -263,13 +263,13 @@ function initPage() {
       setInterval(reloadWebSite, interval*1000, i);
     }
 
-    // classic_modify_20240118001 start
+    // classic_modify_00000000000 start
     const queryString = window.location.search;
     const urlParams = new URLSearchParams(queryString);
     if(!urlParams.has('gridMonitorId[]')) {
       monitors[i].setup_onclick(handleClick);
     }
-    // classic_modify_20240118001 end
+    // classic_modify_00000000000 end
   }
 
   // If you click on the navigation links, shut down streaming so the browser can process it
