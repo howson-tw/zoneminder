@@ -189,7 +189,7 @@ if ( canView('System') ) {
 }
 ?>
       </div>
-      <form method="get">
+   <form method="get">
         <input type="hidden" name="view" value="montage"/>
         <?php echo $filterbar ?>
       </form>
@@ -233,6 +233,36 @@ if ( canView('System') ) {
         </form>
       </div>
       <!-- classic_modify_00000000000 start -->
+<?php
+  // classic_modify_00000000000 start
+  if(isset($_GET["gridMonitorId"])) {
+    // get monitor id position array
+    $arrMonitorIdPosition = array();
+    //print_r($monitors);
+    foreach ($monitors as $key => $monitor) {
+      $arrMonitorIdPosition[$monitor->Id()] = $key;
+    }
+    //print_r($arrMonitorIdPosition);
+
+    //print_r($_GET["gridMonitorId"]);
+    $_GET["gridMonitorId"] = array_unique($_GET["gridMonitorId"]);  
+    foreach ($_GET["gridMonitorId"] as $key => $value) {
+      if($value=="" || $value==0) {
+        array_splice($_GET["gridMonitorId"], $key, 1);
+      }
+    }
+    foreach ($_GET["gridMonitorId"] as $key => $value) {
+      if(!array_key_exists($value, $arrMonitorIdPosition)) {
+        array_splice($_GET["gridMonitorId"], $key, 1);
+      }
+    }
+    //print_r($_GET["gridMonitorId"]);
+  }
+  if(!isset($_GET["gridRatio"])) {
+    $_GET["gridRatio"] = 75;
+  }
+  // classic_modify_00000000000 end
+?>
       <div id="gridControl">
         <form action="index.php?view=montage" method="get">
           <input type="hidden" name="view" value="montage"/>
@@ -246,68 +276,41 @@ if ( canView('System') ) {
             }
           }
           if(isset($_GET["gridMonitorId"])):
-            for($i=0; $i<4; $i++): 
+            foreach($_GET["gridMonitorId"] as $key => $gmId):
         ?>
-          <label>Grid <?php echo ($i+1); ?></label>
-          <input type="number" name="gridMonitorId[]" value="<?php echo isset($_GET["gridMonitorId"][$i]) ? $_GET["gridMonitorId"][$i] : "" ; ?>" size="3">
+          <label>Grid <?php echo ($key+1); ?></label>
+          <input type="number" name="gridMonitorId[]" value="<?php echo $gmId; ?>" size="3">
         <?php 
-            endfor;
+            endforeach;
           else:
-            foreach($arrDefaultGridMonitorId as $key => $dgId):
+            foreach($arrDefaultGridMonitorId as $key => $dgmId):
         ?>
           <label>Grid <?php echo ($i+1); ?></label>
-          <input type="number" name="gridMonitorId[]" value="<?php echo $dgId ; ?>" size="3">
+          <input type="number" name="gridMonitorId[]" value="<?php echo $dgmId ; ?>" size="3">
         <?php
             endforeach;
           endif;
         ?>
+          <label>Grid <?php echo (count(isset($_GET["gridMonitorId"]) ? $_GET["gridMonitorId"] : $arrDefaultGridMonitorId )+1); ?></label>
+          <input type="number" name="gridMonitorId[]" value="" size="3">
           <label>Grid Ratio</label>
-          <input type="number" name="gridRatio" value="<?php echo isset($_GET["gridRatio"]) ? $_GET["gridRatio"] : "75" ; ?>" size="4">
+          <input type="number" name="gridRatio" value="<?php echo $_GET["gridRatio"]; ?>" size="4">
           <input type="submit" value="Apply">
           <a href="index.php?view=montage">
             <input type="button" value="Cancle">
           </a>
         </form>
-        <!--form action="index.php?view=montage" method="get">
-          <input type="hidden" name="view" value="montage"/>
-          <input type="submit" value="Cancel">
-        </form-->
       </div>
       <!-- classic_modify_00000000000 end -->
     </div>
   </div>
   <div id="content">
     <div id="monitors">
-<?php
-  // classic_modify_00000000000 start
-  if(!isset($_GET["gridRatio"])) {
-    $_GET["gridRatio"] = 66;
-  }
-  if(isset($_GET["gridMonitorId"])) {
-    // get monitor id position array
-    $arrMonitorIdPosition = array();
-    //print_r($monitors);
-    foreach ($monitors as $key => $monitor) {
-      $arrMonitorIdPosition[$monitor->Id()] = $key;
-    }
-    //print_r($arrMonitorIdPosition);
-
-    //print_r($_GET["gridMonitorId"]);
-    $_GET["gridMonitorId"] = array_unique($_GET["gridMonitorId"]);
-    foreach ($_GET["gridMonitorId"] as $key => $value) {
-      if(!array_key_exists($value, $arrMonitorIdPosition)) {
-        unset($_GET["gridMonitorId"][$key]);
-      }
-    }
-    //print_r($_GET["gridMonitorId"]);
-  }
-  // classic_modify_00000000000 end
-?>
 <?php if(isset($_GET["gridMonitorId"])): // classic_modify_00000000000 start?>
   <table width="100%">
     <tr>
       <td width="<?php echo $_GET["gridRatio"]; ?>%"><?php isset($_GET["gridMonitorId"][0]) ? showMonitor($monitors[$arrMonitorIdPosition[$_GET["gridMonitorId"][0]]], $_GET["gridMonitorId"]) : ""; ?></td>
-      <td style="width=auto; vertical-align: top;">
+      <td style="width:auto; vertical-align: top;">
         <?php isset($_GET["gridMonitorId"][1]) ? showMonitor($monitors[$arrMonitorIdPosition[$_GET["gridMonitorId"][1]]], $_GET["gridMonitorId"]) : ""; ?>
         <?php isset($_GET["gridMonitorId"][2]) ? showMonitor($monitors[$arrMonitorIdPosition[$_GET["gridMonitorId"][2]]], $_GET["gridMonitorId"]) : ""; ?>
         <?php isset($_GET["gridMonitorId"][3]) ? showMonitor($monitors[$arrMonitorIdPosition[$_GET["gridMonitorId"][3]]], $_GET["gridMonitorId"]) : ""; ?>
@@ -446,7 +449,7 @@ function showMonitor($monitor, $arrGridMonitorId, $strStyle="width: 100%;") {
       //print_r($arrGridMonitorId);
       foreach ($arrGridMonitorId as $key => $monitorId) {
         if($monitorId==$monitor->Id()) {
-          unset($arrGridMonitorId[$key]);
+          array_splice($arrGridMonitorId, $key, 1);
           break;
         }
       }
