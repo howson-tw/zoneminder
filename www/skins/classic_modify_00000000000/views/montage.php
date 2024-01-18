@@ -264,11 +264,14 @@ if ( canView('System') ) {
           <label>Grid Ratio</label>
           <input type="number" name="gridRatio" value="<?php echo isset($_GET["gridRatio"]) ? $_GET["gridRatio"] : "75" ; ?>" size="4">
           <input type="submit" value="Apply">
+          <a href="index.php?view=montage">
+            <input type="button" value="Cancle">
+          </a>
         </form>
-        <form action="index.php?view=montage" method="get">
+        <!--form action="index.php?view=montage" method="get">
           <input type="hidden" name="view" value="montage"/>
           <input type="submit" value="Cancel">
-        </form>
+        </form-->
       </div>
       <!-- classic_modify_00000000000 end -->
     </div>
