@@ -27,6 +27,8 @@ sudo chmod -R 755 *
   - <https://github.com/linuxserver/docker-zoneminder/issues/4>
 - ZoneMinder 1.36.33 - Montage Review problem
   - <https://forums.zoneminder.com/viewtopic.php?t=32605>
+  - php.ini位置
+    - /etc/php/*/apache2/php.ini
 
 # SSL
 - [教學][Ubuntu 架站] 為 Ubuntu 22.04 上的 Apache 配置 Let’s Encrypt SSL 憑證
