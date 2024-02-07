@@ -42,6 +42,10 @@ sudo chmod -R 755 *
   - <https://zack7498.gitbooks.io/mysql/content/chapter1/2shi-yong-zhe-xin-zeng-3001-shou-quan-3001-che-xiao-shou-quan.html>
   - phpMyAdmin不允許使用root登入，故要用上述方法新增使用者於phpMyAdmin使用。
 
+# Cockpit Console
+- Ubuntu 20.04 安裝 Cockpit Console
+  - <https://www.ltsplus.com/linux/ubuntu-20-04-install-cockpit-console> 
+
 # 其他
 - VirtualBox 如何開機後自動啟動虛擬機【Windows排程設定教學】
   - https://eheima.com/7512/virtualbox-autostart
