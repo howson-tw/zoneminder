@@ -167,6 +167,13 @@ if ( $showPtzControls ) {
       </div>
 <?php
 }
+?>
+<!-- classic_modify_00000000000 start -->
+      <div>
+        <a href="http://tsg-temple.tplinkdns.com:38155/DYXsYfmGkECzQWUbcMnm8hNyDQ3qFRqp/gpio/controlPanel" target="_blank" class="button"><input type="button" value="開啟鐵捲門控制器"></a>
+      </div>
+<!-- classic_modify_00000000000 end -->
+<?php
 if ( canView('Events') && ($monitor->Type() != 'WebSite') ) {
 ?>
       <!-- Table styling handled by bootstrap-tables -->
