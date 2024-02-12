@@ -44,8 +44,10 @@ sudo chmod -R 755 *
 
 # Cockpit Console
 - Ubuntu 20.04 安裝 Cockpit Console
-  - <https://www.ltsplus.com/linux/ubuntu-20-04-install-cockpit-console> 
+  - <https://www.ltsplus.com/linux/ubuntu-20-04-install-cockpit-console>
 
 # 其他
 - VirtualBox 如何開機後自動啟動虛擬機【Windows排程設定教學】
-  - https://eheima.com/7512/virtualbox-autostart
+  - <https://eheima.com/7512/virtualbox-autostart>
+- 您的Virtualbox虛擬機是否停止工作？ 試試這個
+  - <https://ubunlog.com/zh-TW/%E6%82%A8%E7%9A%84virtualbox%E8%99%9B%E6%93%AC%E6%A9%9F%E5%B7%B2%E5%81%9C%E6%AD%A2%E5%B7%A5%E4%BD%9C%EF%BC%8C%E8%AB%8B%E5%98%97%E8%A9%A6%E4%BB%A5%E4%B8%8B%E6%93%8D%E4%BD%9C/>
